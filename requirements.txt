@@ -2,4 +2,3 @@ scikit-learn
 pandas
 streamlit
 duckdb
-zipfile
