@@ -43,14 +43,10 @@ def main():
     con.register('data_bajio', data_bajio)
 
     # Título de la aplicación
-    st.title("Exploración del Conjunto de Datos de Precios de Casas de California")
+    st.title("Cliente Ideal")
 
     # Menú del lado izquierdo
     st.sidebar.title("Menú")
-
-    # Opción para mostrar la imagen
-    if st.sidebar.checkbox("Mostrar Imagen"):
-        st.image("images/mi_imagen.png")
 
     # Nueva pestaña para la imagen
     st.sidebar.title("Pestañas")
@@ -60,6 +56,15 @@ def main():
         # Muestra del conjunto de datos
         st.subheader("Muestra del conjunto de datos bajio")
         st.write(data_bajio.head())
+
+        # Agregar el inputbox
+        input_text = st.text_input("Ingrese hasta 8 caracteres:", max_chars=8)
+
+        if input_text:
+            # Filtrar la columna 'cliente' basándonos en el input
+            filtered_data_bajio = data_bajio[data_bajio['customer_id'].str.contains(input_text)]
+            st.write("Resultados filtrados:")
+            st.write(filtered_data_bajio)
 
         # Seleccionar una columna para visualizar
         columna_seleccionada = st.selectbox("Selecciona una columna:", data.columns)
