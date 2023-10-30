@@ -1,12 +1,32 @@
 import streamlit as st
 import pandas as pd
-from sklearn import datasets
 import numpy as np
 import duckdb
+import zipfile
+import os
 from sklearn.datasets import fetch_california_housing
 
 def main():
 
+    # -----Descompresión de datos-----
+    archivo_zip = 'divisiones.zip'
+    archivo_zip = 'Data_/divisiones.zip'
+    
+    # Ruta de la carpeta donde se descomprimirán los archivos
+    carpeta_destino = 'Data_/divisiones_descomprimidas'
+    
+    # Crear la carpeta de destino si no existe
+    if not os.path.exists(carpeta_destino):
+        os.makedirs(carpeta_destino)
+    
+    # Descomprimir el archivo ZIP
+    with zipfile.ZipFile(archivo_zip, 'r') as zip_ref:
+        zip_ref.extractall(carpeta_destino)
+    # -----Fin Descompresión de datos-----
+
+    # Lectura de datos
+    data_bajio = pd.read_csv(carpeta_destino+'/BAJIO/df_crm.csv')
+    
     # Cargar el conjunto de datos de viviendas de California
     housing = fetch_california_housing()
 
@@ -16,12 +36,11 @@ def main():
     # Agregar la columna objetivo (target) al DataFrame
     data['MedHouseVal'] = housing.target
 
-    target = 'MedHouseVal'
-
     # Inicializar una conexión DuckDB
     con = duckdb.connect(database=':memory:')
     # Cargar el DataFrame en DuckDB
     con.register('data', data)
+    con.register('data_bajio', data_bajio)
 
     # Título de la aplicación
     st.title("Exploración del Conjunto de Datos de Precios de Casas de California")
@@ -39,8 +58,8 @@ def main():
 
     if selected_tab == "Exploración de Datos":
         # Muestra del conjunto de datos
-        st.subheader("Muestra del conjunto de datos")
-        st.write(data.head())
+        st.subheader("Muestra del conjunto de datos bajio")
+        st.write(data_bajio.head())
 
         # Seleccionar una columna para visualizar
         columna_seleccionada = st.selectbox("Selecciona una columna:", data.columns)
