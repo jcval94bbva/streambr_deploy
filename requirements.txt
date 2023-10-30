@@ -3,5 +3,4 @@ pandas
 streamlit
 duckdb
 numpy
-os
 zipfile
