@@ -2,5 +2,4 @@ scikit-learn
 pandas
 streamlit
 duckdb
-numpy
 zipfile
