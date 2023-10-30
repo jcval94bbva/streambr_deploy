@@ -1,1 +1,1 @@
-web: streamlit run fundamentos_bbdd.py
+web: streamlit run fornt_BR.py
