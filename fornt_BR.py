@@ -51,9 +51,15 @@ def main():
         if input_text:
             # Filtrar la columna 'cliente' basándonos en el input
             filtered_data_bajio = data_bajio[data_bajio['customer_id'].str.contains(input_text)].drop(columns=['customer_id','DIVISION'])
+            # Definir una función para formatear las filas
+            def formato_fila(fila):
+                return ' /n'.join([f'{i+1}. {valor}' for i, valor in enumerate(fila)])
+                
+            filtered_data_bajio['formatted'] = filtered_data_bajio.apply(formato_fila, axis=1)
+            
             if len(filtered_data_bajio) > 0:
                 right_column.write("Información de tu cliente:")
-                right_column.write(filtered_data_bajio)
+                right_column.write(str(filtered_data_bajio['formatted'].values))
             else:
                 right_column.write("No se encuentra el cliente, se enviará un reporte al operador")
             st.write("")
