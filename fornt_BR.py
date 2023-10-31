@@ -4,6 +4,7 @@ import numpy as np
 import duckdb
 import zipfile
 import os
+from funciones_gen import get_emojis
 
 def main():
 
@@ -27,6 +28,7 @@ def main():
     data_bajio = pd.read_csv(carpeta_destino+'/BAJIO/df_crm.csv')
     data_bajio = data_bajio[[x for x in data_bajio.columns if 'unnam' not in x.lower()]]
 
+    emoj = get_emojis()
     # Inicializar una conexión DuckDB
     con = duckdb.connect(database=':memory:')
     # Cargar el DataFrame en DuckDB
