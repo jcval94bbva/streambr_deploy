@@ -4,7 +4,7 @@ import numpy as np
 import duckdb
 import zipfile
 import os
-from funciones_gen import get_emojis
+from funciones_gen import get_emojis, assigne_emoj
 
 def main():
 
@@ -61,7 +61,8 @@ def main():
             
             if len(filtered_data_bajio) > 0:
                 right_column.write("Información de tu cliente:")
-                right_column.write(str(filtered_data_bajio['formatted'].values[0]))
+                emoj_most__ = assigne_emoj(str(filtered_data_bajio['formatted'].values[0]),emoj)
+                right_column.write(emoj_most__)
             else:
                 right_column.write("No se encuentra el cliente, se enviará un reporte al operador")
             st.write("")
