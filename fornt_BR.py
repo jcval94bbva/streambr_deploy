@@ -37,12 +37,16 @@ def main():
     selected_tab = st.sidebar.radio("", ["🧑‍🚀 Ficha de cliente", "🛠️ Soporte"])
 
     if selected_tab == "🧑‍🚀 Ficha de cliente":
-
-        st.image("images/mi_imagen.png", use_column_width=True)
+        # Crear dos columnas en una fila
+        col1, col2 = st.beta_columns([1, 4])
         
-        # Agregar el inputbox para comentarios
-        input_text = st.text_input("Ingrese el No. de cliente (puedes omitir los 0's):", max_chars=8)
-        input_text = input_text.zfill(8)
+        # Agregar la imagen a la primera columna
+        col1.image("tu_imagen.png", use_column_width=True)
+        
+        # Agregar el input_text a la segunda columna
+        with col2:
+            input_text = st.text_input("Ingrese el No. de cliente (puedes omitir los 0's):", max_chars=8)
+            input_text = input_text.zfill(8)
 
         if input_text:
             # Filtrar la columna 'cliente' basándonos en el input
