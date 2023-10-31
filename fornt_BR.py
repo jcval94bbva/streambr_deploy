@@ -42,9 +42,9 @@ def main():
         left_column, right_column = st.columns(2)
         
         # Agregar la imagen a la columna izquierda
-        with left_column:
-            input_text = st.text_input("Ingrese el No. de cliente (puedes omitir los 0's):", max_chars=8)
-            input_text = input_text.zfill(8)
+        
+        input_text = left_column.text_input("Ingrese el No. de cliente (puedes omitir los 0's):", max_chars=8)
+        input_text = input_text.zfill(8)
         
         # Agregar el input_text a la columna derecha
     
