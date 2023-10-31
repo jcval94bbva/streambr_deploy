@@ -60,7 +60,7 @@ def main():
             filtered_data_bajio['formatted'] = filtered_data_bajio.apply(formato_fila, axis=1)
             
             if len(filtered_data_bajio) > 0:
-                right_column.write("Información de tu cliente:")
+                right_column.write("Información del cliente "+input_text+':')
                 emoj_most__ = assigne_emoj(str(filtered_data_bajio['formatted'].values[0]),emoj)
                 right_column.write(emoj_most__)
             else:
