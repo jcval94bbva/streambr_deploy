@@ -37,6 +37,9 @@ def main():
     selected_tab = st.sidebar.radio("", ["🧑‍🚀 Ficha de cliente", "🛠️ Soporte"])
 
     if selected_tab == "🧑‍🚀 Ficha de cliente":
+
+        st.image("images/mi_imagen.png", use_column_width=True)
+        
         # Agregar el inputbox para comentarios
         input_text = st.text_input("Ingrese el No. de cliente (puedes omitir los 0's):", max_chars=8)
         input_text = input_text.zfill(8)
