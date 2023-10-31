@@ -57,7 +57,7 @@ def main():
             else:
                 right_column.write("No se encuentra el cliente, se enviará un reporte al operador")
             st.write("")
-            st.write('El mejor producto para este cliente es: '+filtered_data_bajio['MEJOR_PRODUCTO_1'].values.to_string(index=False))
+            st.write('El mejor producto para este cliente es: '+str(filtered_data_bajio['MEJOR_PRODUCTO_1'][0]))
             
         # Agregar un inputbox para comentarios
         comentario = st.text_input("Añadir un comentario:")
