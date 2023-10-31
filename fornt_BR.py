@@ -48,7 +48,6 @@ def main():
         
         # Agregar el input_text a la columna derecha
     
-
         if input_text:
             # Filtrar la columna 'cliente' basándonos en el input
             filtered_data_bajio = data_bajio[data_bajio['customer_id'].str.contains(input_text)].drop(columns=['customer_id','DIVISION'])
@@ -57,8 +56,8 @@ def main():
                 right_column.write(filtered_data_bajio)
             else:
                 right_column.write("No se encuentra el cliente, se enviará un reporte al operador")
-        
-            st.write('El mejor producto para este cliente es: '+filtered_data_bajio['MEJOR_PRODUCTO_1'].values)
+            st.write("")
+            st.write('El mejor producto para este cliente es: '+filtered_data_bajio['MEJOR_PRODUCTO_1'].values.to_string(index=False))
             
         # Agregar un inputbox para comentarios
         comentario = st.text_input("Añadir un comentario:")
