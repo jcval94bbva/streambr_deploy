@@ -34,10 +34,7 @@ def main():
 
     # Menú del lado izquierdo
     st.sidebar.title("Menú")
-
-    # Nueva pestaña para la imagen
-    st.sidebar.title("Pestañas")
-    selected_tab = st.sidebar.radio("Selecciona una pestaña:", ["🧑‍🚀 Ficha de cliente", "🛠️ Soporte"])
+    selected_tab = st.sidebar.radio("", ["🧑‍🚀 Ficha de cliente", "🛠️ Soporte"])
 
     if selected_tab == "🧑‍🚀 Ficha de cliente":
         # Agregar el inputbox
