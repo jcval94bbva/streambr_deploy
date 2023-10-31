@@ -43,21 +43,20 @@ def main():
         
         # Agregar la imagen a la columna izquierda
         with left_column:
-            st.image("images/mi_imagen.png", use_column_width=True)
+            input_text = st.text_input("Ingrese el No. de cliente (puedes omitir los 0's):", max_chars=8)
+            input_text = input_text.zfill(8)
         
         # Agregar el input_text a la columna derecha
         with right_column:
-            input_text = st.text_input("Ingrese el No. de cliente (puedes omitir los 0's):", max_chars=8)
-            input_text = input_text.zfill(8)
-
-        if input_text:
-            # Filtrar la columna 'cliente' basándonos en el input
-            filtered_data_bajio = data_bajio[data_bajio['customer_id'].str.contains(input_text)]
-            if len(filtered_data_bajio) > 0:
-                st.write("Información de tu cliente:")
-                st.write(filtered_data_bajio)
-            else:
-                st.write("No se encuentra el cliente, se enviará un reporte al operador")
+    
+            if input_text:
+                # Filtrar la columna 'cliente' basándonos en el input
+                filtered_data_bajio = data_bajio[data_bajio['customer_id'].str.contains(input_text)]
+                if len(filtered_data_bajio) > 0:
+                    st.write("Información de tu cliente:")
+                    st.write(filtered_data_bajio)
+                else:
+                    st.write("No se encuentra el cliente, se enviará un reporte al operador")
 
         # Agregar un inputbox para comentarios
         comentario = st.text_input("Añadir un comentario:")
