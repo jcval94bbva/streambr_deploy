@@ -4,7 +4,6 @@ import numpy as np
 import duckdb
 import zipfile
 import os
-from sklearn.datasets import fetch_california_housing
 
 def main():
 
@@ -27,24 +26,11 @@ def main():
     # Lectura de datos
     data_bajio = pd.read_csv(carpeta_destino+'/BAJIO/df_crm.csv')
     data_bajio = data_bajio[[x for x in data_bajio.columns if 'unnam' not in x.lower()]]
-    
-    # Cargar el conjunto de datos de viviendas de California
-    housing = fetch_california_housing()
-
-    # Crear un DataFrame de pandas con los datos
-    data = pd.DataFrame(data=housing.data, columns=housing.feature_names)
-
-    # Agregar la columna objetivo (target) al DataFrame
-    data['MedHouseVal'] = housing.target
 
     # Inicializar una conexión DuckDB
     con = duckdb.connect(database=':memory:')
     # Cargar el DataFrame en DuckDB
-    con.register('data', data)
     con.register('data_bajio', data_bajio)
-
-    # Título de la aplicación
-    st.title("Ficha de cliente Ideal")
 
     # Menú del lado izquierdo
     st.sidebar.title("Menú")
