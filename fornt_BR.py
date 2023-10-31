@@ -51,20 +51,21 @@ def main():
     
             if input_text:
                 # Filtrar la columna 'cliente' basándonos en el input
-                filtered_data_bajio = data_bajio[data_bajio['customer_id'].str.contains(input_text)]
+                filtered_data_bajio = data_bajio[data_bajio['customer_id'].str.contains(input_text)].drop(columns=['customer_id','DIVISION'])
                 if len(filtered_data_bajio) > 0:
                     st.write("Información de tu cliente:")
                     st.write(filtered_data_bajio)
                 else:
                     st.write("No se encuentra el cliente, se enviará un reporte al operador")
-
+        if input_text:
+            st.write('El mejor producto para este cliente es: '+filtered_data_bajio['MEJOR_PRODUCTO_1'].values)
+            
         # Agregar un inputbox para comentarios
         comentario = st.text_input("Añadir un comentario:")
         guardar_boton = st.button("Guardar")
 
         # Lista para almacenar los comentarios
         comentarios = []
-
         if guardar_boton and comentario:
             comentarios.append(comentario)
             st.write("Comentario guardado")
