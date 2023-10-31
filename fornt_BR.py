@@ -26,6 +26,7 @@ def main():
 
     # Lectura de datos
     data_bajio = pd.read_csv(carpeta_destino+'/BAJIO/df_crm.csv')
+    data_bajio = data_bajio[[x for x in data_bajio.columns if 'unnam' not in x.lower()]]
     
     # Cargar el conjunto de datos de viviendas de California
     housing = fetch_california_housing()
@@ -50,9 +51,9 @@ def main():
 
     # Nueva pestaña para la imagen
     st.sidebar.title("Pestañas")
-    selected_tab = st.sidebar.radio("Selecciona una pestaña:", ["Exploración de Datos", "Imagen"])
+    selected_tab = st.sidebar.radio("Selecciona una pestaña:", ["Ficha de cliente", "Soporte"])
 
-    if selected_tab == "Exploración de Datos":
+    if selected_tab == "Ficha de cliente":
         # Agregar el inputbox
         input_text = st.text_input("Ingrese el No. de cliente (puedes omitir los 0's):", max_chars=8)
         input_text = input_text.zfill(8)
@@ -82,7 +83,7 @@ def main():
                 except Exception as e:
                     st.write("Ocurrió un error al ejecutar la consulta:", e)
 
-    elif selected_tab == "Imagen":
+    elif selected_tab == "Soporte":
         # Pestaña para mostrar la imagen
         st.image("images/mi_imagen.png")
 
