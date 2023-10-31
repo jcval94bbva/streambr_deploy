@@ -18,3 +18,9 @@ def get_emojis():
       "ILC": "📈💳"
     }
 	return conceptos_con_emojis
+
+def assigne_emoj(string, emoj):
+	for con, em in emoj.items():
+		mostrar = em + con
+		string = string.replace(con,mostrar)
+	return string
