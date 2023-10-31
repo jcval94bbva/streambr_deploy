@@ -51,11 +51,11 @@ def main():
 
     # Nueva pestaña para la imagen
     st.sidebar.title("Pestañas")
-    selected_tab = st.sidebar.radio("Selecciona una pestaña:", ["Ficha de cliente", "Soporte"])
+    selected_tab = st.sidebar.radio("Selecciona una pestaña:", ["🧑‍🚀 Ficha de cliente", "🛠️ Soporte"])
 
     if selected_tab == "Ficha de cliente":
         # Agregar el inputbox
-        input_text = st.text_input("Ingrese el No. de cliente (puedes omitir los 0's):", max_chars=8)
+        input_text = st.text_input("Ingrese el No. de cliente (puedes omitir los 0's iniciales 00000123 ➡️ 123):", max_chars=8)
         input_text = input_text.zfill(8)
 
         if input_text:
@@ -66,22 +66,6 @@ def main():
                 st.write(filtered_data_bajio)
             else:
                 st.write("No se encuentra el cliente, se enviará un reporte al operador")
-
-        # Campo de entrada de texto para la consulta SQL
-        consulta_sql = st.text_area("Introduce tu consulta SQL:", value='SELECT * FROM data WHERE MedHouseVal > 1')
-
-        # Botón para ejecutar la consulta SQL
-        if st.button("Ejecutar Consulta SQL"):
-            if consulta_sql:
-                try:
-                    # Ejecutar una consulta SQL en el DataFrame
-                    result = con.execute(consulta_sql)
-                    # Obtener el resultado como un DataFrame de Pandas
-                    result_df = result.fetchdf()
-                    st.write("Resultado de la consulta:")
-                    st.write(result_df)
-                except Exception as e:
-                    st.write("Ocurrió un error al ejecutar la consulta:", e)
 
     elif selected_tab == "Soporte":
         # Pestaña para mostrar la imagen
