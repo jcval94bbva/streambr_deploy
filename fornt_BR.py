@@ -38,13 +38,15 @@ def main():
 
     if selected_tab == "🧑‍🚀 Ficha de cliente":
         # Crear dos columnas en una fila
-        col1, col2 = st.beta_columns([1, 4])
+        # Crear una fila con dos elementos
+        left_column, right_column = st.beta_columns(2)
         
-        # Agregar la imagen a la primera columna
-        col1.image("tu_imagen.png", use_column_width=True)
+        # Agregar la imagen a la columna izquierda
+        with left_column:
+            st.image("tu_imagen.png", use_column_width=True)
         
-        # Agregar el input_text a la segunda columna
-        with col2:
+        # Agregar el input_text a la columna derecha
+        with right_column:
             input_text = st.text_input("Ingrese el No. de cliente (puedes omitir los 0's):", max_chars=8)
             input_text = input_text.zfill(8)
 
