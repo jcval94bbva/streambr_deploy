@@ -21,6 +21,6 @@ def get_emojis():
 
 def assigne_emoj(string, emoj):
 	for con, em in emoj.items():
-		mostrar = em + con
+		mostrar = em + con.replace('Credito','Crédito').replace('Pagares','Pagarés').replace('Captacion','Captación').replace('Nomina','Nómina')
 		string = string.replace(con,mostrar)
 	return string
