@@ -43,7 +43,7 @@ def main():
     con.register('data_bajio', data_bajio)
 
     # Título de la aplicación
-    st.title("Cliente Ideal")
+    st.title("Ficha de cliente Ideal")
 
     # Menú del lado izquierdo
     st.sidebar.title("Menú")
@@ -53,21 +53,18 @@ def main():
     selected_tab = st.sidebar.radio("Selecciona una pestaña:", ["Exploración de Datos", "Imagen"])
 
     if selected_tab == "Exploración de Datos":
-        # Muestra del conjunto de datos
-        st.subheader("Muestra del conjunto de datos bajio")
-        st.write(data_bajio.head())
-
         # Agregar el inputbox
-        input_text = st.text_input("Ingrese hasta 8 caracteres:", max_chars=8)
+        input_text = st.text_input("Ingrese el No. de cliente (puedes omitir los 0's):", max_chars=8)
+        input_text = input_text.zfill(8)
 
         if input_text:
             # Filtrar la columna 'cliente' basándonos en el input
             filtered_data_bajio = data_bajio[data_bajio['customer_id'].str.contains(input_text)]
-            st.write("Resultados filtrados:")
-            st.write(filtered_data_bajio)
-
-        # Seleccionar una columna para visualizar
-        columna_seleccionada = st.selectbox("Selecciona una columna:", data.columns)
+            if len(filtered_data_bajio)>0:
+                st.write("Información de tu cliente:")
+                st.write(filtered_data_bajio)
+            else:
+                st.write("No se encuentra el cliente, se enviará un reporte al operador")
 
         # Campo de entrada de texto para la consulta SQL
         consulta_sql = st.text_area("Introduce tu consulta SQL:", value='SELECT * FROM data WHERE MedHouseVal > 1')
