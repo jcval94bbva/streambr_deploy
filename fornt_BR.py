@@ -47,17 +47,17 @@ def main():
             input_text = input_text.zfill(8)
         
         # Agregar el input_text a la columna derecha
-        with right_column:
     
-            if input_text:
-                # Filtrar la columna 'cliente' basándonos en el input
-                filtered_data_bajio = data_bajio[data_bajio['customer_id'].str.contains(input_text)].drop(columns=['customer_id','DIVISION'])
-                if len(filtered_data_bajio) > 0:
-                    st.write("Información de tu cliente:")
-                    st.write(filtered_data_bajio)
-                else:
-                    st.write("No se encuentra el cliente, se enviará un reporte al operador")
+
         if input_text:
+            # Filtrar la columna 'cliente' basándonos en el input
+            filtered_data_bajio = data_bajio[data_bajio['customer_id'].str.contains(input_text)].drop(columns=['customer_id','DIVISION'])
+            if len(filtered_data_bajio) > 0:
+                right_column.write("Información de tu cliente:")
+                right_column.write(filtered_data_bajio)
+            else:
+                right_column.write("No se encuentra el cliente, se enviará un reporte al operador")
+        
             st.write('El mejor producto para este cliente es: '+filtered_data_bajio['MEJOR_PRODUCTO_1'].values)
             
         # Agregar un inputbox para comentarios
