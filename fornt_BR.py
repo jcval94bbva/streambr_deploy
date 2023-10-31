@@ -37,19 +37,31 @@ def main():
     selected_tab = st.sidebar.radio("", ["🧑‍🚀 Ficha de cliente", "🛠️ Soporte"])
 
     if selected_tab == "🧑‍🚀 Ficha de cliente":
-        # Agregar el inputbox
+        # Agregar el inputbox para comentarios
         input_text = st.text_input("Ingrese el No. de cliente (puedes omitir los 0's):", max_chars=8)
         input_text = input_text.zfill(8)
 
         if input_text:
             # Filtrar la columna 'cliente' basándonos en el input
             filtered_data_bajio = data_bajio[data_bajio['customer_id'].str.contains(input_text)]
-            if len(filtered_data_bajio)>0:
+            if len(filtered_data_bajio) > 0:
                 st.write("Información de tu cliente:")
                 st.write(filtered_data_bajio)
             else:
                 st.write("No se encuentra el cliente, se enviará un reporte al operador")
 
+        # Agregar un inputbox para comentarios
+        comentario = st.text_input("Añadir un comentario:")
+        guardar_boton = st.button("Guardar")
+
+        # Lista para almacenar los comentarios
+        comentarios = []
+
+        if guardar_boton and comentario:
+            comentarios.append(comentario)
+            st.write("Comentario guardado")
+            # Limpiar el inputbox
+            comentario = ""
 
     elif selected_tab == "🛠️ Soporte":
         # Pestaña para mostrar la imagen
