@@ -39,11 +39,11 @@ def main():
     if selected_tab == "🧑‍🚀 Ficha de cliente":
         # Crear dos columnas en una fila
         # Crear una fila con dos elementos
-        left_column, right_column = st.beta_columns(2)
+        left_column, right_column = st.columns(2)
         
         # Agregar la imagen a la columna izquierda
         with left_column:
-            st.image("tu_imagen.png", use_column_width=True)
+            st.image("images/mi_imagen.png", use_column_width=True)
         
         # Agregar el input_text a la columna derecha
         with right_column:
