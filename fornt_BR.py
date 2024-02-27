@@ -122,8 +122,12 @@ def main():
         covid_filtered = covid_filtered[covid_filtered['Date'] == date]
         
         # Crear y mostrar un gráfico de barras con los datos filtrados de COVID-19
-        fig2 = px.bar(covid_filtered, x="Confirmed", y="Country", color="Country", orientation='h', range_x=[0,35000])
+        fig2 = px.bar(covid_filtered, x="Confirmed", y="Country", color="Country", orientation='h', range_x=[0,35000],
+                     animation_frame='Date', animation_group='Country')
         fig2.update_layout(width=800)
+        
+        fig2.layout.updatemenus[0].buttons[0].args[1]['frame']['duration'] = 30
+        fig2.layout.updatemenus[0].buttons[0].args[1]['transition']['duration'] = 5
         st.write(fig2)
 
 if __name__ == '__main__':
