@@ -125,8 +125,8 @@ def main():
         fig2 = px.bar(covid_filtered, x="Confirmed", y="Country", color="Country", orientation='h', range_x=[0,35000],
                      animation_frame='Date', animation_group='Country')
         
-        fig2.layout.updatemenus[0].buttons[0].args[1]['frame']['duration'] = 30
-        fig2.layout.updatemenus[0].buttons[0].args[1]['transition']['duration'] = 5
+        # fig2.layout.updatemenus[0].buttons[0].args[1]['frame']['duration'] = 30
+        # fig2.layout.updatemenus[0].buttons[0].args[1]['transition']['duration'] = 5
         fig2.update_layout(width=800)
         st.write(fig2)
 
