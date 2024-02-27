@@ -36,7 +36,7 @@ def main():
 
     # Menú del lado izquierdo
     st.sidebar.title("Menú")
-    selected_tab = st.sidebar.radio("", ["🧑‍🚀 Ficha de cliente", "🛠️ Soporte"])
+    selected_tab = st.sidebar.radio("", ["🧑‍🚀 Ficha de cliente", "🛠️ Soporte", "📊 Visualización de Datos"])
 
     if selected_tab == "🧑‍🚀 Ficha de cliente":
         # Crear dos columnas en una fila
@@ -87,6 +87,42 @@ def main():
     elif selected_tab == "🛠️ Soporte":
         # Pestaña para mostrar la imagen
         st.image("images/mi_imagen.png")
+
+    elif selected_tab == "📊 Visualización de Datos":
+        # Cargar el conjunto de datos 'gapminder' con Plotly Express
+        df = px.data.gapminder()
+        
+        # Permitir al usuario seleccionar un año para filtrar los datos
+        year_options = df['year'].unique().tolist()
+        year = st.selectbox('Which year would you like to see?', year_options, 0)
+        df_year_filtered = df[df['year'] == year]
+        
+        # Crear y mostrar un gráfico de dispersión con los datos filtrados
+        fig = px.scatter(df_year_filtered, x="gdpPercap", y="lifeExp", size="pop", color="continent",
+                         hover_name="country", log_x=True, size_max=55, range_x=[100,100000], range_y=[25,90])
+        fig.update_layout(width=800)
+        st.write(fig)
+        
+        # Leer datos de COVID-19 desde un CSV en línea
+        covid_url = 'https://raw.githubusercontent.com/shinokada/covid-19-stats/master/data/daily-new-confirmed-cases-of-covid-19-tests-per-case.csv'
+        covid = pd.read_csv(covid_url)
+        covid.columns = ['Country', 'Code', 'Date', 'Confirmed', 'Days since confirmed']
+        covid['Date'] = pd.to_datetime(covid['Date']).dt.strftime('%Y-%m-%d')
+        
+        # Permitir al usuario seleccionar una fecha y países para filtrar los datos de COVID-19
+        date_options = covid['Date'].unique().tolist()
+        date = st.selectbox('Which date would you like to see?', date_options, 100)
+        country_options = covid['Country'].unique().tolist()
+        country = st.multiselect('Which country would you like to see?', country_options, ['Brazil'])
+        
+        # Filtrar los datos de COVID-19 por país y fecha
+        covid_filtered = covid[covid['Country'].isin(country)]
+        covid_filtered = covid_filtered[covid_filtered['Date'] == date]
+        
+        # Crear y mostrar un gráfico de barras con los datos filtrados de COVID-19
+        fig2 = px.bar(covid_filtered, x="Confirmed", y="Country", color="Country", orientation='h', range_x=[0,35000])
+        fig2.update_layout(width=800)
+        st.write(fig2)
 
 if __name__ == '__main__':
     main()
