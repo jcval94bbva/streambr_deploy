@@ -96,11 +96,12 @@ def main():
         # Permitir al usuario seleccionar un año para filtrar los datos
         year_options = df['year'].unique().tolist()
         year = st.selectbox('Which year would you like to see?', year_options, 0)
-        df_year_filtered = df[df['year'] == year]
+        # df_year_filtered = df[df['year'] == year]
         
         # Crear y mostrar un gráfico de dispersión con los datos filtrados
-        fig = px.scatter(df_year_filtered, x="gdpPercap", y="lifeExp", size="pop", color="continent",
-                         hover_name="country", log_x=True, size_max=55, range_x=[100,100000], range_y=[25,90])
+        fig = px.scatter(df, x="gdpPercap", y="lifeExp", size="pop", color="continent",
+                         hover_name="country", log_x=True, size_max=55, range_x=[100,100000], range_y=[25,90],
+                        animation_frame='year', animation_group='country')
         fig.update_layout(width=800)
         st.write(fig)
         
