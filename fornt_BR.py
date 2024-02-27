@@ -5,6 +5,7 @@ import duckdb
 import zipfile
 import os
 from funciones_gen import get_emojis, assigne_emoj
+import plotly.express as px
 
 def main():
 
