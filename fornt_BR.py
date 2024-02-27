@@ -119,7 +119,7 @@ def main():
         
         # Filtrar los datos de COVID-19 por país y fecha
         covid_filtered = covid[covid['Country'].isin(country)]
-        covid_filtered = covid_filtered[covid_filtered['Date'] == date]
+        # covid_filtered = covid_filtered[covid_filtered['Date'] == date]
         
         # Crear y mostrar un gráfico de barras con los datos filtrados de COVID-19
         fig2 = px.bar(covid_filtered, x="Confirmed", y="Country", color="Country", orientation='h', range_x=[0,35000],
