@@ -37,27 +37,38 @@ def main():
 
     # Menú del lado izquierdo
     st.sidebar.title("Menú")
-    selected_tab = st.sidebar.radio("", ["🧑‍🚀 Ficha de cliente", "🛠️ Soporte", "📊 Visualización de Datos"])
+    # selected_tab = st.sidebar.radio("", ["🧑‍🚀 Ficha de cliente", "🛠️ Soporte", "📊 Visualización de Datos"])
     selected_tab = st.sidebar.radio("", ["🧑‍🚀 Ficha de cliente", "🛠️ Soporte", "📊 Visualización de Datos", "🎵 Selección de Géneros Musicales"])
 
     if selected_tab == "🎵 Selección de Géneros Musicales":
         # Listado de géneros musicales
         generos = ["Rock", "Pop", "Jazz", "Electrónica", "Clásica", "Hip-Hop", "Reggaeton", "Blues", "Metal", "Country"]
         # Permitir al usuario elegir hasta 3 géneros musicales
-        generos_elegidos = st.multiselect("Elige hasta 3 géneros musicales favoritos:", generos, default=None)
+        generos_elegidos = st.multiselect("Elige 3 géneros musicales favoritos:", generos, default=None)
     
-        # Calificaciones para los géneros seleccionados
-        calificaciones = {}
-        if len(generos_elegidos) > 0:
+        # Validar que exactamente 3 géneros han sido elegidos
+        if len(generos_elegidos) != 3:
+            st.error("Debes seleccionar exactamente 3 géneros.")
+        else:
+            # Calificaciones para los géneros seleccionados
+            calificaciones = {}
             st.write("Califica los géneros elegidos del 1 al 10:")
             for genero in generos_elegidos:
                 calificaciones[genero] = st.slider(f"Calificación para {genero}:", 1, 10, 5)
     
-        # Botón para obtener la recomendación
-        if st.button("Obtener Recomendación"):
-            # Simular una función que genera una recomendación basada en los géneros y sus calificaciones
-            recomendacion = modelo(calificaciones)
-            st.write("Canción recomendada:", recomendacion)
+            # Botón para obtener la recomendación
+            if st.button("Obtener Recomendación"):
+                # Supongamos que la función modelo genera una recomendación basada en los géneros y sus calificaciones
+                recomendacion = modelo(calificaciones)
+                st.write("Canción recomendada:", recomendacion)
+    
+            # Botón para mostrar las tres peores calificaciones
+            if st.button("Mostrar Bottom 3"):
+                # Ordenar calificaciones por valor y tomar las tres menores
+                bottom_3 = sorted(calificaciones.items(), key=lambda x: x[1])[:3]
+                st.write("Tres géneros con menor calificación:")
+                for genero, calificacion in bottom_3:
+                    st.write(f"{genero}: {calificacion}")
 
     elif selected_tab == "🧑‍🚀 Ficha de cliente":
         # Crear dos columnas en una fila
