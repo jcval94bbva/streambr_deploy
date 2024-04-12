@@ -4,7 +4,7 @@ import numpy as np
 import duckdb
 import zipfile
 import os
-from funciones_gen import get_emojis, assigne_emoj
+from funciones_gen import get_emojis, assigne_emoj, modelo
 import plotly.express as px
 
 def main():
@@ -38,8 +38,28 @@ def main():
     # Menú del lado izquierdo
     st.sidebar.title("Menú")
     selected_tab = st.sidebar.radio("", ["🧑‍🚀 Ficha de cliente", "🛠️ Soporte", "📊 Visualización de Datos"])
+    selected_tab = st.sidebar.radio("", ["🧑‍🚀 Ficha de cliente", "🛠️ Soporte", "📊 Visualización de Datos", "🎵 Selección de Géneros Musicales"])
 
-    if selected_tab == "🧑‍🚀 Ficha de cliente":
+    if selected_tab == "🎵 Selección de Géneros Musicales":
+        # Listado de géneros musicales
+        generos = ["Rock", "Pop", "Jazz", "Electrónica", "Clásica", "Hip-Hop", "Reggaeton", "Blues", "Metal", "Country"]
+        # Permitir al usuario elegir hasta 3 géneros musicales
+        generos_elegidos = st.multiselect("Elige hasta 3 géneros musicales favoritos:", generos, default=None)
+    
+        # Calificaciones para los géneros seleccionados
+        calificaciones = {}
+        if len(generos_elegidos) > 0:
+            st.write("Califica los géneros elegidos del 1 al 10:")
+            for genero in generos_elegidos:
+                calificaciones[genero] = st.slider(f"Calificación para {genero}:", 1, 10, 5)
+    
+        # Botón para obtener la recomendación
+        if st.button("Obtener Recomendación"):
+            # Simular una función que genera una recomendación basada en los géneros y sus calificaciones
+            recomendacion = modelo(calificaciones)
+            st.write("Canción recomendada:", recomendacion)
+
+    elif selected_tab == "🧑‍🚀 Ficha de cliente":
         # Crear dos columnas en una fila
         # Crear una fila con dos elementos
         left_column, right_column = st.columns(2)
