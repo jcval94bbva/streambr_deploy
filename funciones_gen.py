@@ -25,3 +25,7 @@ def assigne_emoj(string, emoj):
 		mostrar = em + con
 		string = string.replace(con,mostrar)
 	return string
+
+
+def modelo(lista_top):
+	return "Rock Clásico"
