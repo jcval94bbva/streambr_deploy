@@ -1,7 +1,7 @@
-# UP_Fundamentos_BBDD
-Proyecto Final Fundamentos BBDD
+# UP_ML 2
+Proyecto Final ML2
 
 https://strploy-br-63sf45-jcval94-pp68bx6pvp.streamlit.app/
 
-Normalizarción de datos ... (3 formas normales)
+Despliegue de un mododelo en GCP y Streamlit
 
