@@ -4,7 +4,7 @@ import numpy as np
 import duckdb
 import zipfile
 import os
-from funciones_gen import get_emojis, assigne_emoj, modelo
+from funciones_gen import get_emojis, assigne_emoj, modelo, get_genders
 import plotly.express as px
 
 def main():
@@ -38,11 +38,11 @@ def main():
     # Menú del lado izquierdo
     st.sidebar.title("Menú")
     # selected_tab = st.sidebar.radio("", ["🧑‍🚀 Ficha de cliente", "🛠️ Soporte", "📊 Visualización de Datos"])
-    selected_tab = st.sidebar.radio("", ["🧑‍🚀 Ficha de cliente", "🛠️ Soporte", "📊 Visualización de Datos", "🎵 Selección de Géneros Musicales"])
+    selected_tab = st.sidebar.radio("", ["🎵 Selección de Géneros Musicales","📊 Visualización de Datos", ])
 
     if selected_tab == "🎵 Selección de Géneros Musicales":
         # Listado de géneros musicales
-        generos = ["Rock", "Pop", "Jazz", "Electrónica", "Clásica", "Hip-Hop", "Reggaeton", "Blues", "Metal", "Country"]
+        generos = get_genders()
         # Permitir al usuario elegir hasta 3 géneros musicales
         generos_elegidos = st.multiselect("Elige 3 géneros musicales favoritos:", generos, default=None)
     
