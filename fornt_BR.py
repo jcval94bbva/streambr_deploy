@@ -8,36 +8,29 @@ from funciones_gen import get_emojis, assigne_emoj, modelo, get_genders
 import plotly.express as px
 
 def main():
-
-    # -----Descompresión de datos-----
-    archivo_zip = 'divisiones.zip'
-    archivo_zip = 'Data_/divisiones.zip'
     
     # Ruta de la carpeta donde se descomprimirán los archivos
-    carpeta_destino = 'Data_/divisiones_descomprimidas'
+    carpeta_destino = 'Data_'
     
     # Crear la carpeta de destino si no existe
     if not os.path.exists(carpeta_destino):
         os.makedirs(carpeta_destino)
     
-    # Descomprimir el archivo ZIP
-    with zipfile.ZipFile(archivo_zip, 'r') as zip_ref:
-        zip_ref.extractall(carpeta_destino)
     # -----Fin Descompresión de datos-----
 
     # Lectura de datos
-    data_bajio = pd.read_csv(carpeta_destino+'/BAJIO/df_crm.csv')
-    data_bajio = data_bajio[[x for x in data_bajio.columns if 'unnam' not in x.lower()]]
+    data_centroides = pd.read_csv(carpeta_destino+'/centroides_generos.csv')
+    
 
     emoj = get_emojis()
     # Inicializar una conexión DuckDB
     con = duckdb.connect(database=':memory:')
-    # Cargar el DataFrame en DuckDB
-    con.register('data_bajio', data_bajio)
+    # Cargar el DataFrame en DuckDB para que se puedan hacer consultas
+    con.register('data_bajio', data_centroides)
 
     # Menú del lado izquierdo
     st.sidebar.title("Menú")
-    # selected_tab = st.sidebar.radio("", ["🧑‍🚀 Ficha de cliente", "🛠️ Soporte", "📊 Visualización de Datos"])
+    
     selected_tab = st.sidebar.radio("", ["🎵 Selección de Géneros Musicales","📊 Visualización de Datos", ])
 
     if selected_tab == "🎵 Selección de Géneros Musicales":
