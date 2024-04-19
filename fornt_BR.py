@@ -21,13 +21,14 @@ def main():
     # Lectura de datos
     data_centroides = pd.read_csv(carpeta_destino+'/centroides_generos.csv')
     
-
     emoj = get_emojis()
     # Inicializar una conexión DuckDB
     con = duckdb.connect(database=':memory:')
     # Cargar el DataFrame en DuckDB para que se puedan hacer consultas
     con.register('data_bajio', data_centroides)
-
+    
+    st.image("images/portada.png")
+    
     # Menú del lado izquierdo
     st.sidebar.title("Menú")
     
