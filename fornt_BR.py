@@ -64,6 +64,8 @@ def main():
                 st.write("Encontramos un punto en el espacio de las canciones", posicipon_espacio_cancion)
 
                 st.write("Pero para que ese punto haga sentido, usaremos una API de GCP que nos diga los secretos de ese punto")
+
+                st.write("[Notebook](https://colab.research.google.com/drive/1rnYxUtNQ1GesDJ1n3fqJ2dyQBdsLb7XR#scrollTo=kRTze_zl76-I)")
                 
                 st.write("Canción recomendada:", recomendacion)
     
