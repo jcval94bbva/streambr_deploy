@@ -47,67 +47,22 @@ def main():
             calificaciones = {}
             st.write("Califica los géneros elegidos del 1 al 10:")
             for genero in generos_elegidos:
-                calificaciones[genero] = st.slider(f"Calificación para {genero}:", 1, 10, 5)
+                calificaciones[genero] = st.slider(f"Calificación para {genero}:", 1, 10, 8)
     
             # Botón para obtener la recomendación
             if st.button("Obtener Recomendación"):
                 # Supongamos que la función modelo genera una recomendación basada en los géneros y sus calificaciones
                 recomendacion = modelo(calificaciones)
+                st.write(calificaciones)
                 st.write("Canción recomendada:", recomendacion)
     
             # Botón para mostrar las tres peores calificaciones
-            if st.button("Mostrar Bottom 3"):
-                # Ordenar calificaciones por valor y tomar las tres menores
-                bottom_3 = sorted(calificaciones.items(), key=lambda x: x[1])[:3]
-                st.write("Tres géneros con menor calificación:")
-                for genero, calificacion in bottom_3:
-                    st.write(f"{genero}: {calificacion}")
-
-    elif selected_tab == "🧑‍🚀 Ficha de cliente":
-        # Crear dos columnas en una fila
-        # Crear una fila con dos elementos
-        left_column, right_column = st.columns(2)
-        
-        # Agregar la imagen a la columna izquierda
-        
-        input_text = left_column.text_input("Ingrese el No. de cliente (puedes omitir los 0's):", max_chars=8)
-        input_text = input_text.zfill(8)
-        
-        # Agregar el input_text a la columna derecha
-    
-        if input_text:
-            # Filtrar la columna 'cliente' basándonos en el input
-            filtered_data_bajio = data_bajio[data_bajio['customer_id'].str.contains(input_text)].drop(columns=['customer_id','DIVISION'])
-            # Definir una función para formatear las filas
-            def formato_fila(fila):
-                return ' \n'.join([f'{i+1}. {valor}' for i, valor in enumerate(fila)])
-                
-            filtered_data_bajio['formatted'] = filtered_data_bajio.apply(formato_fila, axis=1)
-            
-            if len(filtered_data_bajio) > 0:
-                right_column.write("Información del cliente "+input_text+':')
-                emoj_most__ = assigne_emoj(str(filtered_data_bajio['formatted'].values[0]),emoj)
-                right_column.write(emoj_most__)
-            else:
-                right_column.write("No se encuentra el cliente, se enviará un reporte al operador")
-            st.write("")
-            try:
-                prodo = str(filtered_data_bajio['MEJOR_PRODUCTO_1'].values[0])
-            except:
-                prodo = ''
-            st.write('El mejor producto para este cliente es: '+prodo)
-            
-        # Agregar un inputbox para comentarios
-        comentario = st.text_input("Añadir un comentario:")
-        guardar_boton = st.button("Guardar")
-
-        # Lista para almacenar los comentarios
-        comentarios = []
-        if guardar_boton and comentario:
-            comentarios.append(comentario)
-            st.write("Comentario guardado")
-            # Limpiar el inputbox
-            comentario = ""
+            # if st.button("Mostrar Bottom 3"):
+            #     # Ordenar calificaciones por valor y tomar las tres menores
+            #     bottom_3 = sorted(calificaciones.items(), key=lambda x: x[1])[:3]
+            #     st.write("Tres géneros con menor calificación:")
+            #     for genero, calificacion in bottom_3:
+            #         st.write(f"{genero}: {calificacion}")
 
     elif selected_tab == "🛠️ Soporte":
         # Pestaña para mostrar la imagen
