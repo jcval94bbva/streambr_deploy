@@ -1,5 +1,30 @@
 import numpy as np
 import pandas as pd
+import requests
+import json
+
+
+def call_predict_function(x, y):
+    # URL de tu función desplegada
+    url = 'https://us-central1-upml2-420500.cloudfunctions.net/predict_function'
+
+    # Datos que quieres enviar, ajusta según el formato esperado por tu función
+    data = {
+        "x": x,
+        "y": y
+    }
+
+    # Convertir los datos a formato JSON
+    json_data = json.dumps(data)
+
+    # Enviar la solicitud POST a la función
+    response = requests.post(url, data=json_data, headers={'Content-Type': 'application/json'})
+
+    # Imprimir la respuesta recibida
+    print("Status Code:", response.status_code)
+    print("Response Body:", response.json())
+    return response
+
 
 def get_emojis():
 	conceptos_con_emojis = {
