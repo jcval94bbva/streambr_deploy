@@ -1,3 +1,5 @@
+import numpy as np
+import pandas as pd
 
 def get_emojis():
 	conceptos_con_emojis = {
