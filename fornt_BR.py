@@ -66,9 +66,11 @@ def main():
                 st.write("Pero para que ese punto haga sentido, usaremos una API de GCP que nos diga todos sus secretos")
 
                 st.write("[Notebook](https://colab.research.google.com/drive/1rnYxUtNQ1GesDJ1n3fqJ2dyQBdsLb7XR#scrollTo=kRTze_zl76-I)")
+
+                recomendacion = call_predict_function(posicipon_espacio_cancion[0], posicipon_espacio_cancion[1])
                 
                 st.write("Canción recomendada:", recomendacion)
-    
+        
             # Botón para mostrar las tres peores calificaciones
             # if st.button("Mostrar Bottom 3"):
             #     # Ordenar calificaciones por valor y tomar las tres menores
