@@ -4,7 +4,7 @@ import numpy as np
 import duckdb
 import zipfile
 import os
-from funciones_gen import get_emojis, assigne_emoj, modelo, get_genders, centroide_ponderado
+from funciones_gen import get_emojis, assigne_emoj, modelo, get_genders, centroide_ponderado, call_predict_function
 import plotly.express as px
 
 def main():
