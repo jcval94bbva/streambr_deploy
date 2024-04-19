@@ -32,7 +32,7 @@ def main():
     # Menú del lado izquierdo
     st.sidebar.title("Menú")
     
-    selected_tab = st.sidebar.radio("", ["🎵 Selección de Géneros Musicales","📊 Visualización de Datos", ])
+    selected_tab = st.sidebar.radio("", ["🎵 Selección de Géneros Musicales","📊 About, ¿Cómo lo hicimos?", ])
 
     if selected_tab == "🎵 Selección de Géneros Musicales":
         # Listado de géneros musicales
@@ -75,7 +75,7 @@ def main():
                 bottom_3_canciones_cercanas = resp_json['farthest_tracks']
 
                 
-                st.write("Canciones recomendadas:", top_3_canciones_cercanas)
+                st.write("Te podrían gustar:", top_3_canciones_cercanas)
 
                 st.write("Experimental:", bottom_3_canciones_cercanas)
         
@@ -91,46 +91,57 @@ def main():
         # Pestaña para mostrar la imagen
         st.image("images/mi_imagen.png")
 
-    elif selected_tab == "📊 Visualización de Datos":
-        # Cargar el conjunto de datos 'gapminder' con Plotly Express
-        df = px.data.gapminder()
+    elif selected_tab == "📊 About, ¿Cómo lo hicimos?":
+        st.write("Con ayuda de Spotify, obtuvimos datos generales de las canciones")
+        st.image("images/Spotify.png", caption='' , use_column_width='auto')
+        st.write("Intentamos reducir esas caracterísicas a través de PCA, sin embargo, queríamos un espacio donde no hubiera pérdida de la varianza al reducir dimensiones")
         
-        # Permitir al usuario seleccionar un año para filtrar los datos
-        year_options = df['year'].unique().tolist()
-        year = st.selectbox('Which year would you like to see?', year_options, 0)
-        # df_year_filtered = df[df['year'] == year]
+        st.image("images/hip_hop.png", caption='' , use_column_width='auto')
         
-        # Crear y mostrar un gráfico de dispersión con los datos filtrados
-        fig = px.scatter(df, x="gdpPercap", y="lifeExp", size="pop", color="continent",
-                         hover_name="country", log_x=True, size_max=55, range_x=[100,100000], range_y=[25,90],
-                        animation_frame='year', animation_group='country')
-        fig.update_layout(width=800)
-        st.write(fig)
+        st.write("Y entonces encontramos los AutoEncoders, en donde colocamos un espacio de 2 dimensiones justo en el centro para que ese espacio conservara la mayor cantidad de explicabilidad respecto a las variables originales")
+        st.image("images/newplot.png", caption='Y listo' , use_column_width='auto')
+
+        st.write("Posteriormente construimos un recomendador, que lo único que hace es encontrar puntos cercanos al input del usuario, y para proteger la privacidad, lo desarrollamos en Google Cloud Platform, creando una API")
         
-        # Leer datos de COVID-19 desde un CSV en línea
-        covid_url = 'https://raw.githubusercontent.com/shinokada/covid-19-stats/master/data/daily-new-confirmed-cases-of-covid-19-tests-per-case.csv'
-        covid = pd.read_csv(covid_url)
-        covid.columns = ['Country', 'Code', 'Date', 'Confirmed', 'Days since confirmed']
-        covid['Date'] = pd.to_datetime(covid['Date']).dt.strftime('%Y-%m-%d')
+        # # Cargar el conjunto de datos 'gapminder' con Plotly Express
+        # df = px.data.gapminder()
         
-        # Permitir al usuario seleccionar una fecha y países para filtrar los datos de COVID-19
-        date_options = covid['Date'].unique().tolist()
-        date = st.selectbox('Which date would you like to see?', date_options, 100)
-        country_options = covid['Country'].unique().tolist()
-        country = st.multiselect('Which country would you like to see?', country_options, ['Brazil'])
+        # # Permitir al usuario seleccionar un año para filtrar los datos
+        # year_options = df['year'].unique().tolist()
+        # year = st.selectbox('Which year would you like to see?', year_options, 0)
+        # # df_year_filtered = df[df['year'] == year]
         
-        # Filtrar los datos de COVID-19 por país y fecha
-        covid_filtered = covid[covid['Country'].isin(country)]
-        # covid_filtered = covid_filtered[covid_filtered['Date'] == date]
+        # # Crear y mostrar un gráfico de dispersión con los datos filtrados
+        # fig = px.scatter(df, x="gdpPercap", y="lifeExp", size="pop", color="continent",
+        #                  hover_name="country", log_x=True, size_max=55, range_x=[100,100000], range_y=[25,90],
+        #                 animation_frame='year', animation_group='country')
+        # fig.update_layout(width=800)
+        # st.write(fig)
         
-        # Crear y mostrar un gráfico de barras con los datos filtrados de COVID-19
-        fig2 = px.bar(covid_filtered, x="Confirmed", y="Country", color="Country", orientation='h', range_x=[0,35000],
-                     animation_frame='Date', animation_group='Country')
+        # # Leer datos de COVID-19 desde un CSV en línea
+        # covid_url = 'https://raw.githubusercontent.com/shinokada/covid-19-stats/master/data/daily-new-confirmed-cases-of-covid-19-tests-per-case.csv'
+        # covid = pd.read_csv(covid_url)
+        # covid.columns = ['Country', 'Code', 'Date', 'Confirmed', 'Days since confirmed']
+        # covid['Date'] = pd.to_datetime(covid['Date']).dt.strftime('%Y-%m-%d')
         
-        # fig2.layout.updatemenus[0].buttons[0].args[1]['frame']['duration'] = 30
-        # fig2.layout.updatemenus[0].buttons[0].args[1]['transition']['duration'] = 5
-        fig2.update_layout(width=800)
-        st.write(fig2)
+        # # Permitir al usuario seleccionar una fecha y países para filtrar los datos de COVID-19
+        # date_options = covid['Date'].unique().tolist()
+        # date = st.selectbox('Which date would you like to see?', date_options, 100)
+        # country_options = covid['Country'].unique().tolist()
+        # country = st.multiselect('Which country would you like to see?', country_options, ['Brazil'])
+        
+        # # Filtrar los datos de COVID-19 por país y fecha
+        # covid_filtered = covid[covid['Country'].isin(country)]
+        # # covid_filtered = covid_filtered[covid_filtered['Date'] == date]
+        
+        # # Crear y mostrar un gráfico de barras con los datos filtrados de COVID-19
+        # fig2 = px.bar(covid_filtered, x="Confirmed", y="Country", color="Country", orientation='h', range_x=[0,35000],
+        #              animation_frame='Date', animation_group='Country')
+        
+        # # fig2.layout.updatemenus[0].buttons[0].args[1]['frame']['duration'] = 30
+        # # fig2.layout.updatemenus[0].buttons[0].args[1]['transition']['duration'] = 5
+        # fig2.update_layout(width=800)
+        # st.write(fig2)
 
 if __name__ == '__main__':
     main()
