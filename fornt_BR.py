@@ -53,7 +53,16 @@ def main():
             if st.button("Obtener Recomendación"):
                 # Supongamos que la función modelo genera una recomendación basada en los géneros y sus calificaciones
                 recomendacion = modelo(calificaciones)
-                st.write(calificaciones)
+                st.write("A través de este diccionario", calificaciones)
+
+                gg = [k for k, v in calificaciones.items()]
+                pesos  = [v for k, v in calificaciones.items()]
+                
+                
+                posicipon_espacio_cancion = centroide_ponderado(gg, pesos, data_centroides)
+
+                st.write("Encontramos un punto en el espacio de las canciones", calificaciones)
+                
                 st.write("Canción recomendada:", recomendacion)
     
             # Botón para mostrar las tres peores calificaciones
