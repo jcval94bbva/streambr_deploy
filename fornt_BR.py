@@ -68,8 +68,15 @@ def main():
                 st.write("[Notebook](https://colab.research.google.com/drive/1rnYxUtNQ1GesDJ1n3fqJ2dyQBdsLb7XR#scrollTo=kRTze_zl76-I)")
 
                 recomendacion = call_predict_function(posicipon_espacio_cancion[0], posicipon_espacio_cancion[1])
+
+                resp_json = recomendacion.json()
+                top_3_canciones_cercanas = resp_json['closest_tracks']
+                bottom_3_canciones_cercanas = resp_json['farthest_tracks']
+
                 
-                st.write("Canción recomendada:", recomendacion)
+                st.write("Canciones recomendadas:", top_3_canciones_cercanas)
+
+                st.write("Experimental:", bottom_3_canciones_cercanas)
         
             # Botón para mostrar las tres peores calificaciones
             # if st.button("Mostrar Bottom 3"):
