@@ -27,7 +27,7 @@ def main():
     # Cargar el DataFrame en DuckDB para que se puedan hacer consultas
     con.register('data_bajio', data_centroides)
     
-    st.image("images/portada.png")
+    st.image("images/portada.png", caption='' , use_column_width=True)
     
     # Menú del lado izquierdo
     st.sidebar.title("Menú")
