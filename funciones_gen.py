@@ -146,3 +146,16 @@ def get_genders():
  'electronic',
  'electro',
  'world-music']
+
+
+def centroide_ponderado(generos, pesos, data_centroides):
+    '''
+    :param generos: lista con los tres generos escogidos por el usuario
+    :param pesos: pesos asignados a los generos escogidos
+    :param data_centroides: dataframe con los centroides de los géneros en el espacio 2D
+    :return: coordenadas x,y del centroide de los generos escogidos
+    '''
+    dd = data_centroides[data_centroides.track_genre.isin(generos)]
+    ddx = np.round((dd.x*pesos/sum(pesos)).sum(),8)
+    ddy = np.round((dd.y*pesos/sum(pesos)).sum(), 8)
+    return ddx, ddy
