@@ -1,10 +1,17 @@
 document.addEventListener('DOMContentLoaded', function() {
+    console.log("scripts.js: DOMContentLoaded event ha ocurrido. JS está cargado.");
+  
     const chatInput = document.getElementById('chatInput');
     const sendBtn = document.getElementById('sendBtn');
     const chatWindow = document.getElementById('chatWindow');
   
+    console.log("scripts.js: Elementos HTML capturados:",
+      { chatInput, sendBtn, chatWindow }
+    );
+  
     // Función para agregar un mensaje
     function appendMessage(sender, text) {
+      console.log("appendMessage: Añadiendo mensaje de sender:", sender, "con text:", text);
       const messageDiv = document.createElement('div');
       messageDiv.classList.add('message', sender);
       messageDiv.textContent = text;
@@ -15,8 +22,14 @@ document.addEventListener('DOMContentLoaded', function() {
   
     // Procesa el mensaje ingresado
     function processMessage() {
+      console.log("processMessage: Iniciando procesamiento de mensaje");
       const text = chatInput.value.trim();
-      if (text === '') return;
+      console.log("processMessage: Texto ingresado:", text);
+  
+      if (text === '') {
+        console.log("processMessage: El usuario no escribió nada. Retorno.");
+        return;
+      }
       
       // Agregar mensaje del usuario
       appendMessage('user', text);
@@ -24,19 +37,28 @@ document.addEventListener('DOMContentLoaded', function() {
   
       let result;
       try {
-        // Evaluar la expresión con math.js
+        console.log("processMessage: Evaluando expresión con math.js...");
         result = math.evaluate(text);
+        console.log("processMessage: Resultado de math.evaluate:", result);
       } catch (e) {
+        console.log("processMessage: Se produjo un error al evaluar:", e.message);
         result = 'Error: Expresión inválida';
       }
       // Agregar respuesta del "bot"
-      appendMessage('bot', result);
+      appendMessage('bot', String(result));
     }
   
-    // Asignar eventos: clic en botón y tecla Enter en el input
-    sendBtn.addEventListener('click', processMessage);
+    // Asignar eventos
+    console.log("scripts.js: Asignando evento click al botón Enviar...");
+    sendBtn.addEventListener('click', function() {
+      console.log("sendBtn: Botón clicado");
+      processMessage();
+    });
+  
     chatInput.addEventListener('keypress', function(e) {
+      console.log("chatInput: keypress detectado:", e.key);
       if (e.key === 'Enter') {
+        console.log("chatInput: Enter presionado, llamando processMessage()");
         processMessage();
       }
     });
