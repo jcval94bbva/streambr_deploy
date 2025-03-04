@@ -3,34 +3,37 @@ document.addEventListener('DOMContentLoaded', function() {
     const sendBtn = document.getElementById('sendBtn');
     const chatWindow = document.getElementById('chatWindow');
   
-    // Función para agregar un mensaje al chat
+    // Función para agregar un mensaje
     function appendMessage(sender, text) {
       const messageDiv = document.createElement('div');
       messageDiv.classList.add('message', sender);
       messageDiv.textContent = text;
       chatWindow.appendChild(messageDiv);
+      // Auto-scroll hacia el final
       chatWindow.scrollTop = chatWindow.scrollHeight;
     }
   
-    // Función para procesar el mensaje enviado
+    // Procesa el mensaje ingresado
     function processMessage() {
       const text = chatInput.value.trim();
       if (text === '') return;
-      // Agrega el mensaje del usuario
+      
+      // Agregar mensaje del usuario
       appendMessage('user', text);
       chatInput.value = '';
   
       let result;
       try {
-        // Evaluar la expresión usando math.js
+        // Evaluar la expresión con math.js
         result = math.evaluate(text);
       } catch (e) {
         result = 'Error: Expresión inválida';
       }
-      // Agrega la respuesta del "bot"
+      // Agregar respuesta del "bot"
       appendMessage('bot', result);
     }
   
+    // Asignar eventos: clic en botón y tecla Enter en el input
     sendBtn.addEventListener('click', processMessage);
     chatInput.addEventListener('keypress', function(e) {
       if (e.key === 'Enter') {

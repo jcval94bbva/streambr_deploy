@@ -3,6 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <title>Calculadora Chat</title>
+  <!-- Define una base para que se resuelvan correctamente las rutas relativas -->
+  <base href="/">
   <!-- Bootstrap CSS -->
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
   <!-- Hoja de estilos personalizada -->
@@ -11,11 +13,11 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/10.6.4/math.min.js"></script>
 </head>
 <body>
-  <div class="container">
-    <h1 class="text-center my-4">Calculadora Chat</h1>
+  <div class="container my-4">
+    <h1 class="text-center mb-4">Calculadora Chat</h1>
     <div id="chatContainer" class="card">
       <div id="chatWindow" class="card-body">
-        <!-- Aquí se mostrarán los mensajes del chat -->
+        <!-- Aquí se mostrarán los mensajes -->
       </div>
       <div class="card-footer">
         <div class="input-group">
