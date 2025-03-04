@@ -1,0 +1,18 @@
+body {
+    background-color: #f8f9fa;
+  }
+  
+  /* Control de visibilidad de secciones */
+  .seccion-activa {
+    display: block;
+  }
+  
+  .seccion-inactiva {
+    display: none;
+  }
+  
+  /* Ajustes para el contenedor de sliders */
+  #sliderContainer .slider-item {
+    margin-bottom: 1rem;
+  }
+  

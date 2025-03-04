@@ -1,147 +1,59 @@
 import streamlit as st
+import streamlit.components.v1 as components
 import pandas as pd
-import numpy as np
 import duckdb
-import zipfile
 import os
-from funciones_gen import get_emojis, assigne_emoj, modelo, get_genders, centroide_ponderado, call_predict_function
-import plotly.express as px
+
+# Importa tus funciones personalizadas (ajusta a tu necesidad real)
+from funciones_gen import (
+    get_emojis,
+    assigne_emoj,
+    modelo,
+    get_genders,
+    centroide_ponderado,
+    call_predict_function
+)
 
 def main():
-    
-    # Ruta de la carpeta donde se descomprimirán los archivos
+    st.set_page_config(page_title="Recomendador Musical", layout="wide")
+
+    # Ruta de la carpeta donde se ubican los datos
     carpeta_destino = 'Data_'
-    
-    # Crear la carpeta de destino si no existe
     if not os.path.exists(carpeta_destino):
         os.makedirs(carpeta_destino)
     
-    # -----Fin Descompresión de datos-----
-
-    # Lectura de datos
-    data_centroides = pd.read_csv(carpeta_destino+'/centroides_generos.csv')
+    # Carga de datos
+    data_centroides = pd.read_csv(os.path.join(carpeta_destino, 'centroides_generos.csv'))
     
+    # Ejemplo de uso de funciones
     emoj = get_emojis()
-    # Inicializar una conexión DuckDB
+    
+    # Conexión a DuckDB (si la requieres)
     con = duckdb.connect(database=':memory:')
-    # Cargar el DataFrame en DuckDB para que se puedan hacer consultas
     con.register('data_bajio', data_centroides)
     
-    st.image("images/portada.png", caption='' , use_column_width='auto')
-    
-    # Menú del lado izquierdo
-    st.sidebar.title("Menú")
-    
-    selected_tab = st.sidebar.radio("", ["🎵 Selección de Géneros Musicales","📊 About, ¿Cómo lo hicimos?", ])
+    # Carga del HTML
+    with open("templates/index.html", "r", encoding="utf-8") as f:
+        html_code = f.read()
 
-    if selected_tab == "🎵 Selección de Géneros Musicales":
-        # Listado de géneros musicales
-        generos = get_genders()
-        # Permitir al usuario elegir hasta 3 géneros musicales
-        generos_elegidos = st.multiselect("Elige 3 géneros musicales favoritos:", generos, default=None)
-    
-        # Validar que exactamente 3 géneros han sido elegidos
-        if len(generos_elegidos) != 3:
-            st.error("Debes seleccionar exactamente 3 géneros.")
-        else:
-            # Calificaciones para los géneros seleccionados
-            calificaciones = {}
-            st.write("Califica los géneros elegidos del 1 al 10:")
-            for genero in generos_elegidos:
-                calificaciones[genero] = st.slider(f"Calificación para {genero}:", 1, 10, 8)
-    
-            # Botón para obtener la recomendación
-            if st.button("Obtener Recomendación"):
-                # Supongamos que la función modelo genera una recomendación basada en los géneros y sus calificaciones
-                recomendacion = modelo(calificaciones)
-                st.write("A través de este diccionario", calificaciones)
+    # Muestra el HTML en la aplicación
+    # Ajusta la altura según lo necesites
+    components.html(html_code, height=1500, scrolling=True)
 
-                gg = [k for k, v in calificaciones.items()]
-                pesos  = [v for k, v in calificaciones.items()]
-                
-                
-                posicipon_espacio_cancion = centroide_ponderado(gg, pesos, data_centroides)
-
-                st.write("Encontramos un punto en el espacio de las canciones", posicipon_espacio_cancion)
-
-                st.write("Pero para que ese punto haga sentido, usaremos una API de GCP que nos diga todos sus secretos")
-
-                st.write("[Notebook](https://colab.research.google.com/drive/1rnYxUtNQ1GesDJ1n3fqJ2dyQBdsLb7XR#scrollTo=kRTze_zl76-I)")
-
-                recomendacion = call_predict_function(posicipon_espacio_cancion[0], posicipon_espacio_cancion[1])
-
-                resp_json = recomendacion.json()
-                top_3_canciones_cercanas = resp_json['closest_tracks']
-                bottom_3_canciones_cercanas = resp_json['farthest_tracks']
-
-                
-                st.write("Te podrían gustar:", top_3_canciones_cercanas)
-
-                st.write("Experimental:", bottom_3_canciones_cercanas)
-        
-            # Botón para mostrar las tres peores calificaciones
-            # if st.button("Mostrar Bottom 3"):
-            #     # Ordenar calificaciones por valor y tomar las tres menores
-            #     bottom_3 = sorted(calificaciones.items(), key=lambda x: x[1])[:3]
-            #     st.write("Tres géneros con menor calificación:")
-            #     for genero, calificacion in bottom_3:
-            #         st.write(f"{genero}: {calificacion}")
-
-    elif selected_tab == "🛠️ Soporte":
-        # Pestaña para mostrar la imagen
-        st.image("images/mi_imagen.png")
-
-    elif selected_tab == "📊 About, ¿Cómo lo hicimos?":
-        st.write("Con ayuda de Spotify, obtuvimos datos generales de las canciones")
-        st.image("images/Spotify.png", caption='' , use_column_width='auto')
-        st.write("Intentamos reducir esas caracterísicas a través de PCA, sin embargo, queríamos un espacio donde no hubiera pérdida de la varianza al reducir dimensiones")
-        
-        st.image("images/hip_hop.png", caption='' , use_column_width='auto')
-        
-        st.write("Y entonces encontramos los AutoEncoders, en donde colocamos un espacio de 2 dimensiones justo en el centro para que ese espacio conservara la mayor cantidad de explicabilidad respecto a las variables originales")
-        st.image("images/newplot.png", caption='Y listo' , use_column_width='auto')
-
-        st.write("Posteriormente construimos un recomendador, que lo único que hace es encontrar puntos cercanos al input del usuario, y para proteger la privacidad, lo desarrollamos en Google Cloud Platform, creando una API")
-        
-        # # Cargar el conjunto de datos 'gapminder' con Plotly Express
-        # df = px.data.gapminder()
-        
-        # # Permitir al usuario seleccionar un año para filtrar los datos
-        # year_options = df['year'].unique().tolist()
-        # year = st.selectbox('Which year would you like to see?', year_options, 0)
-        # # df_year_filtered = df[df['year'] == year]
-        
-        # # Crear y mostrar un gráfico de dispersión con los datos filtrados
-        # fig = px.scatter(df, x="gdpPercap", y="lifeExp", size="pop", color="continent",
-        #                  hover_name="country", log_x=True, size_max=55, range_x=[100,100000], range_y=[25,90],
-        #                 animation_frame='year', animation_group='country')
-        # fig.update_layout(width=800)
-        # st.write(fig)
-        
-        # # Leer datos de COVID-19 desde un CSV en línea
-        # covid_url = 'https://raw.githubusercontent.com/shinokada/covid-19-stats/master/data/daily-new-confirmed-cases-of-covid-19-tests-per-case.csv'
-        # covid = pd.read_csv(covid_url)
-        # covid.columns = ['Country', 'Code', 'Date', 'Confirmed', 'Days since confirmed']
-        # covid['Date'] = pd.to_datetime(covid['Date']).dt.strftime('%Y-%m-%d')
-        
-        # # Permitir al usuario seleccionar una fecha y países para filtrar los datos de COVID-19
-        # date_options = covid['Date'].unique().tolist()
-        # date = st.selectbox('Which date would you like to see?', date_options, 100)
-        # country_options = covid['Country'].unique().tolist()
-        # country = st.multiselect('Which country would you like to see?', country_options, ['Brazil'])
-        
-        # # Filtrar los datos de COVID-19 por país y fecha
-        # covid_filtered = covid[covid['Country'].isin(country)]
-        # # covid_filtered = covid_filtered[covid_filtered['Date'] == date]
-        
-        # # Crear y mostrar un gráfico de barras con los datos filtrados de COVID-19
-        # fig2 = px.bar(covid_filtered, x="Confirmed", y="Country", color="Country", orientation='h', range_x=[0,35000],
-        #              animation_frame='Date', animation_group='Country')
-        
-        # # fig2.layout.updatemenus[0].buttons[0].args[1]['frame']['duration'] = 30
-        # # fig2.layout.updatemenus[0].buttons[0].args[1]['transition']['duration'] = 5
-        # fig2.update_layout(width=800)
-        # st.write(fig2)
+    # =========================================
+    # NOTA IMPORTANTE:
+    #
+    # Tal como está, el HTML y el JS trabajan de forma
+    # independiente al código Python. Para que la lógica
+    # de recomendación real (modelo, call_predict_function, etc.)
+    # se ejecute en Python, necesitarás un mecanismo de
+    # comunicación (ej: fetch a un endpoint, un custom
+    # component, o recargar la página con query params).
+    #
+    # Esta estructura separa la interfaz (HTML) del backend
+    # (Python), pero requiere más configuración si quieres
+    # un flujo completamente integrado.
+    # =========================================
 
 if __name__ == '__main__':
     main()
