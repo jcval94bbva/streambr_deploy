@@ -2,21 +2,16 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <title>Calculadora Chat</title>
-  <!-- Hoja de estilos del chat -->
-  <link rel="stylesheet" href="./static/css/styles.css">
+  <title>Mi Componente de Chat</title>
   <!-- Librería de Streamlit para componentes -->
   <script src="https://unpkg.com/streamlit-component-lib@latest/dist/index.js"></script>
 </head>
 <body>
-  <div class="chat-container">
-    <div id="chat-window"></div>
-    <div class="input-area">
-      <input type="text" id="chat-input" placeholder="Ej: 2+2, math.sqrt(9)">
-      <button id="send-button">Enviar</button>
-    </div>
-  </div>
-  <!-- Lógica principal del componente -->
+  <h3>Hola desde el index.html del componente</h3>
+  <input type="text" id="myInput" placeholder="Escribe algo">
+  <button id="sendBtn">Enviar</button>
+
+  <!-- Script que maneja la comunicación con Streamlit -->
   <script src="./static/js/scripts.js"></script>
 </body>
 </html>

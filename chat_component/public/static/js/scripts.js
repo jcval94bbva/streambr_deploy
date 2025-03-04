@@ -1,57 +1,31 @@
 (function() {
   const Streamlit = window.Streamlit;
 
-  // Renderizar los mensajes en el #chat-window
-  function renderMessages(messages) {
-    const chatWindow = document.getElementById("chat-window");
-    chatWindow.innerHTML = "";
-
-    messages.forEach(msg => {
-      const [sender, text] = msg; // msg[0] = 'user'|'bot', msg[1] = texto
-      const div = document.createElement("div");
-      div.classList.add("message", sender);
-      div.textContent = text;
-      chatWindow.appendChild(div);
-    });
-
-    // Hacer scroll al final
-    chatWindow.scrollTop = chatWindow.scrollHeight;
-  }
-
-  // Maneja el evento RENDER_EVENT que envía Streamlit
+  // Función para manejar el render (si quisieras recibir props desde Python)
   function onRender(event) {
-    const { messages } = event.detail; // Python nos envía messages como prop
-    renderMessages(messages);
-    // Ajusta la altura del iframe
+    // Ajustamos altura para que no haya scrollbars raras
     Streamlit.setFrameHeight();
   }
 
-  // Escuchamos cuando Streamlit nos pide renderizar
+  // Escuchar el evento RENDER_EVENT
   Streamlit.events.addEventListener(Streamlit.RENDER_EVENT, onRender);
 
   // Marcar el componente como listo
   Streamlit.setComponentReady();
+  // Ajustar la altura inicial
   Streamlit.setFrameHeight();
 
   // Capturar elementos
-  const chatInput = document.getElementById("chat-input");
-  const sendButton = document.getElementById("send-button");
+  const input = document.getElementById("myInput");
+  const sendBtn = document.getElementById("sendBtn");
 
-  // Evento click en "Enviar"
-  sendButton.addEventListener("click", () => {
-    const text = chatInput.value.trim();
+  // Al hacer clic en "Enviar", devolvemos el texto a Python
+  sendBtn.addEventListener("click", () => {
+    const text = input.value.trim();
     if (text) {
-      // Enviar el texto a Python
+      // Devuelve el valor al backend de Python
       Streamlit.setComponentValue(text);
-      // Limpiar el input
-      chatInput.value = "";
-    }
-  });
-
-  // Enviar con Enter
-  chatInput.addEventListener("keypress", (e) => {
-    if (e.key === "Enter") {
-      sendButton.click();
+      input.value = "";  // Limpia el campo
     }
   });
 })();
