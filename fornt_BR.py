@@ -2,46 +2,46 @@ import streamlit as st
 import streamlit.components.v1 as components
 import math
 
-# 1. Registrar el Custom Component
-#    path debe apuntar a la carpeta "public" de tu componente
-my_chat_component = components.declare_component(
-    "my_chat_component",
+# Declaramos el custom component, apuntando a la carpeta "public" dentro de "chat_component"
+chat_component = components.declare_component(
+    "chat_component",
     path="./chat_component/public"
 )
 
-# 2. Manejo del historial de chat
-if "messages" not in st.session_state:
-    # Guardamos una lista de tuplas (sender, text), ej. ("user", "2+2")
-    st.session_state["messages"] = []
-
-def process_message(user_input: str) -> str:
+def evaluate_expression(expression: str) -> str:
     """
-    Procesa la operación matemática en Python usando eval
-    con un entorno muy limitado. Retorna el resultado como string.
+    Evalúa la expresión matemática usando solo funciones del módulo 'math'.
+    Retorna un string con el resultado o un mensaje de error.
     """
-    allowed_names = {"math": math}  # Solo exponemos 'math'
+    allowed_names = {"math": math}
     try:
-        result = eval(user_input, {"__builtins__": {}}, allowed_names)
+        result = eval(expression, {"__builtins__": {}}, allowed_names)
+        return str(result)
     except Exception as e:
-        result = f"Error: {e}"
-    return str(result)
+        return f"Error: {e}"
 
 def main():
-    st.title("Calculadora Chat con Custom Component")
+    st.set_page_config(page_title="Calculadora Chat", layout="centered")
+    
+    # Manejo del historial de mensajes en la sesión
+    if "messages" not in st.session_state:
+        # Guardamos cada mensaje como una tupla (sender, texto)
+        st.session_state["messages"] = []
 
-    # 3. Llamar al componente, pasando el historial como propiedad
-    new_message = my_chat_component(chat_history=st.session_state["messages"])
+    # Llamamos al componente, pasándole el historial actual
+    user_input = chat_component(messages=st.session_state["messages"])
+    # user_input será un string si el usuario escribió algo,
+    # o None si no hay nuevo input
 
-    # 4. Si el usuario ha enviado un mensaje nuevo
-    if new_message:
-        # Agregamos el mensaje del usuario
-        st.session_state["messages"].append(("user", new_message))
-        # Procesamos la operación en Python
-        response = process_message(new_message)
-        # Agregamos la respuesta del "bot"
-        st.session_state["messages"].append(("bot", response))
+    if user_input:
+        # El usuario envió un nuevo mensaje
+        st.session_state["messages"].append(("user", user_input))
+        # Procesamos la expresión en Python
+        result = evaluate_expression(user_input)
+        # Guardamos la respuesta del "bot"
+        st.session_state["messages"].append(("bot", result))
 
-    # (Opcional) Mostrar el historial en la app para depuración
+    # (Opcional) Mostrar el historial para depuración
     st.write("Historial de chat:", st.session_state["messages"])
 
 if __name__ == "__main__":
