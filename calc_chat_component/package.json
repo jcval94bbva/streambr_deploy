@@ -1,0 +1,10 @@
+{
+    "name": "calc_chat_component",
+    "version": "0.1.0",
+    "description": "Custom component para calculadora chat",
+    "main": "index.html",
+    "scripts": {},
+    "author": "",
+    "license": "MIT"
+  }
+  
