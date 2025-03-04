@@ -3,41 +3,63 @@ import math
 
 st.set_page_config(page_title="Calculadora Chat", layout="centered")
 
-# CSS inline para el estilo "chat"
+# CSS inline con estilo mejorado
 chat_style = """
 <style>
-.chat-container {
-    width: 100%;
+body {
+    background-color: #e9ecef; /* Fondo gris claro */
+}
+
+/* Contenedor padre para centrar el chat y darle espacio superior */
+.chat-page-container {
     max-width: 600px;
-    margin: 0 auto;
+    margin: 3rem auto; /* 3rem de margen arriba y abajo, auto a los lados */
+}
+
+/* Título alineado al centro */
+.chat-title {
+    text-align: center;
+    margin-bottom: 1.5rem;
+    color: #343a40;
+    font-weight: 600;
+    font-size: 1.5rem;
+}
+
+/* Contenedor principal del "chat" */
+.chat-container {
     border: 1px solid #dee2e6;
     border-radius: 8px;
     background-color: #fff;
     display: flex;
     flex-direction: column;
-    height: 550px;
+    height: 500px; /* altura fija */
     overflow: hidden;
 }
 
+/* Zona donde se muestran los mensajes */
 .chat-window {
     flex: 1;
-    padding: 10px;
+    padding: 15px;
     overflow-y: auto;
     background-color: #f8f9fa;
+    display: flex;
+    flex-direction: column; /* orden normal: de arriba a abajo */
+    justify-content: flex-start; 
 }
 
+/* Burbujas de mensaje */
 .message {
     margin-bottom: 10px;
     padding: 10px;
     border-radius: 10px;
     max-width: 75%;
     word-wrap: break-word;
+    font-size: 0.9rem;
 }
 
 .user {
     background-color: #d1e7dd; /* Verde claro */
     margin-left: auto;
-    margin-right: 0;
     text-align: right;
     border-bottom-right-radius: 0;
 }
@@ -45,11 +67,11 @@ chat_style = """
 .bot {
     background-color: #f8d7da; /* Rojo claro */
     margin-right: auto;
-    margin-left: 0;
     text-align: left;
     border-bottom-left-radius: 0;
 }
 
+/* Barra inferior con el input y el botón */
 .input-area {
     display: flex;
     padding: 10px;
@@ -84,65 +106,57 @@ chat_style = """
 
 st.markdown(chat_style, unsafe_allow_html=True)
 
-
-# ------------------ Manejo de estado ------------------
+# ----------- Manejo de estado -----------
 if "messages" not in st.session_state:
-    # Lista de tuplas (sender, text)
     st.session_state["messages"] = []
 
 if "chat_input" not in st.session_state:
-    # Contenido actual del cuadro de texto
     st.session_state["chat_input"] = ""
 
-
-# ------------------ Función Callback ------------------
+# ----------- Callback para enviar mensaje -----------
 def enviar_mensaje():
-    """Se llama cuando el usuario hace clic en 'Enviar'."""
-    # Obtener texto que el usuario escribió
+    """Función que se llama al presionar el botón 'Enviar'."""
     user_text = st.session_state["chat_input"].strip()
     if not user_text:
-        return  # No hacer nada si la entrada está vacía
-
-    # Agregar mensaje del usuario al historial
+        return  # No enviar si está vacío
+    # Agregar mensaje del usuario
     st.session_state["messages"].append(("user", user_text))
-
-    # Intentar evaluar la operación en un entorno limitado
+    # Evaluar en Python
     allowed_names = {"math": math}
     try:
         result = eval(user_text, {"__builtins__": {}}, allowed_names)
     except Exception as e:
         result = f"Error: {e}"
-
-    # Agregar respuesta al historial
+    # Agregar respuesta del "bot"
     st.session_state["messages"].append(("bot", str(result)))
-
-    # Limpiar el contenido del input
+    # Limpiar input
     st.session_state["chat_input"] = ""
 
+# ----------- Estructura de la página -----------
+st.markdown("<div class='chat-page-container'>", unsafe_allow_html=True)
+st.markdown("<h2 class='chat-title'>Calculadora Chat</h2>", unsafe_allow_html=True)
 
-# ------------------ Interfaz del Chat ------------------
-# Contenedor del Chat: abrimos con HTML
-st.markdown("""
-<div class="chat-container">
-    <div class="chat-window" id="chat-window">
-""", unsafe_allow_html=True)
+# Contenedor principal del chat
+st.markdown("<div class='chat-container'>", unsafe_allow_html=True)
 
-# Mostrar los mensajes
+# Ventana de mensajes
+st.markdown("<div class='chat-window'>", unsafe_allow_html=True)
 for sender, text in st.session_state["messages"]:
     sender_class = "user" if sender == "user" else "bot"
-    st.markdown(f'<div class="message {sender_class}">{text}</div>', unsafe_allow_html=True)
-
-st.markdown("</div>", unsafe_allow_html=True)  # cierra .chat-window
-
-# Input y botón en la misma "fila"
-# Usamos label= para dar un nombre accesible, y label_visibility="collapsed" para ocultarlo visualmente
-st.text_input(
-    "Ingresar operación",
-    key="chat_input",
-    label_visibility="collapsed",
-    placeholder="Ej: 2+2, math.sqrt(9), etc."
-)
-st.button("Enviar", on_click=enviar_mensaje)
-
-# Cerramos el .chat-container
+    st.markdown(f"<div class='message {sender_class}'>{text}</div>", unsafe_allow_html=True)
 st.markdown("</div>", unsafe_allow_html=True)
+
+# Input + Botón
+input_col, btn_col = st.columns([4, 1])
+with input_col:
+    st.text_input(
+        "Ingresa operación",
+        key="chat_input",
+        label_visibility="collapsed",
+        placeholder="Ej: 2+2, math.sqrt(9), etc."
+    )
+with btn_col:
+    st.button("Enviar", on_click=enviar_mensaje)
+
+st.markdown("</div>", unsafe_allow_html=True)  # Cierra .chat-container
+st.markdown("</div>", unsafe_allow_html=True)  # Cierra .chat-page-container
