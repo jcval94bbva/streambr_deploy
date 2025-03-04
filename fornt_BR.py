@@ -1,11 +1,9 @@
 import streamlit as st
 import math
 
-# 1. Configurar la página
 st.set_page_config(page_title="Calculadora Chat", layout="centered")
 
-# 2. CSS inline para dar estilo al "chat"
-#    Aquí definimos .chat-container, .message, .user y .bot
+# CSS inline para el estilo "chat"
 chat_style = """
 <style>
 .chat-container {
@@ -37,7 +35,7 @@ chat_style = """
 }
 
 .user {
-    background-color: #d1e7dd; /* verde claro */
+    background-color: #d1e7dd; /* Verde claro */
     margin-left: auto;
     margin-right: 0;
     text-align: right;
@@ -45,7 +43,7 @@ chat_style = """
 }
 
 .bot {
-    background-color: #f8d7da; /* rojo claro */
+    background-color: #f8d7da; /* Rojo claro */
     margin-right: auto;
     margin-left: 0;
     text-align: left;
@@ -86,55 +84,65 @@ chat_style = """
 
 st.markdown(chat_style, unsafe_allow_html=True)
 
-# 3. Inicializar un contenedor para la "app de chat"
+
+# ------------------ Manejo de estado ------------------
+if "messages" not in st.session_state:
+    # Lista de tuplas (sender, text)
+    st.session_state["messages"] = []
+
+if "chat_input" not in st.session_state:
+    # Contenido actual del cuadro de texto
+    st.session_state["chat_input"] = ""
+
+
+# ------------------ Función Callback ------------------
+def enviar_mensaje():
+    """Se llama cuando el usuario hace clic en 'Enviar'."""
+    # Obtener texto que el usuario escribió
+    user_text = st.session_state["chat_input"].strip()
+    if not user_text:
+        return  # No hacer nada si la entrada está vacía
+
+    # Agregar mensaje del usuario al historial
+    st.session_state["messages"].append(("user", user_text))
+
+    # Intentar evaluar la operación en un entorno limitado
+    allowed_names = {"math": math}
+    try:
+        result = eval(user_text, {"__builtins__": {}}, allowed_names)
+    except Exception as e:
+        result = f"Error: {e}"
+
+    # Agregar respuesta al historial
+    st.session_state["messages"].append(("bot", str(result)))
+
+    # Limpiar el contenido del input
+    st.session_state["chat_input"] = ""
+
+
+# ------------------ Interfaz del Chat ------------------
+# Contenedor del Chat: abrimos con HTML
 st.markdown("""
 <div class="chat-container">
     <div class="chat-window" id="chat-window">
 """, unsafe_allow_html=True)
 
-# 4. Manejar el estado de los mensajes
-if "messages" not in st.session_state:
-    st.session_state["messages"] = []  # Lista de tuplas (sender, texto)
-
-# 5. Mostrar los mensajes que haya en la sesión
+# Mostrar los mensajes
 for sender, text in st.session_state["messages"]:
     sender_class = "user" if sender == "user" else "bot"
     st.markdown(f'<div class="message {sender_class}">{text}</div>', unsafe_allow_html=True)
 
-st.markdown("</div>", unsafe_allow_html=True)  # Cerrar chat-window
+st.markdown("</div>", unsafe_allow_html=True)  # cierra .chat-window
 
-# 6. Área de input
-#    Para capturar el texto ingresado, usaremos un st.text_input
-#    y un st.button dentro de la misma "línea" visual.
-user_input = st.text_input("", key="chat_input", label_visibility="collapsed")
-send_clicked = st.button("Enviar")
+# Input y botón en la misma "fila"
+# Usamos label= para dar un nombre accesible, y label_visibility="collapsed" para ocultarlo visualmente
+st.text_input(
+    "Ingresar operación",
+    key="chat_input",
+    label_visibility="collapsed",
+    placeholder="Ej: 2+2, math.sqrt(9), etc."
+)
+st.button("Enviar", on_click=enviar_mensaje)
 
-# 7. Cerrar el chat-container
+# Cerramos el .chat-container
 st.markdown("</div>", unsafe_allow_html=True)
-
-# 8. Lógica para manejar la entrada del usuario
-if send_clicked and user_input.strip():
-    # 8.1 Agregar el mensaje del usuario al historial
-    message_text = user_input.strip()
-    st.session_state["messages"].append(("user", message_text))
-
-    # 8.2 Evaluar la operación en Python
-    #     Restringir eval a un entorno muy limitado
-    allowed_names = {
-        "math": math,
-        # Podrías exponer otras funciones seguras si quieres
-        # Ej: "abs": abs, "pow": pow, etc.
-    }
-    try:
-        result = eval(message_text, {"__builtins__": None}, allowed_names)
-    except Exception as e:
-        result = f"Error: {e}"
-
-    # 8.3 Agregar la respuesta (resultado) al historial
-    st.session_state["messages"].append(("bot", str(result)))
-
-    # 8.4 Limpiar el input
-    st.session_state["chat_input"] = ""
-
-    # 8.5 Forzar recarga para que se muestre de inmediato el nuevo mensaje
-    st.experimental_rerun()
